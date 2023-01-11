@@ -1,0 +1,14 @@
+  FROM golang:1.18
+
+  RUN mkdir -p /go/src/github.com/pocket5s/dedb
+
+  RUN apt-get update
+  RUN apt -y install protobuf-compiler
+
+  WORKDIR /go/src/github.com/pocket5s/dedb
+  RUN git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+  RUN mkdir /root/.ssh/
+  RUN echo "StrictHostKeyChecking no" >> /root/.ssh/config
+  RUN go env -w GOPRIVATE=github.com/pocket5s/*
+
+  CMD bash

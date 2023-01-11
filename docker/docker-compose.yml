@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  redis:
+    image: "redis/redis-stack-server:latest"
+    ports:
+      - "6397"
+    networks:
+      - dedb-net
+  dedb:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    tty: true
+    depends_on:
+      - redis
+    environment:
+      - REDIS=redis
+      - REDIS_PASSWORD=
+    volumes:
+      - ../:/go/src/github.com/pocket5s/dedb
+      - ~/.ssh/:/root/.ssh/
+    ports:
+      - 50001:50001
+    networks:
+      - dedb-net
+networks:
+  dedb-net:
+    name: dedbnet

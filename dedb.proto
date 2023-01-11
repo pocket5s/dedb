@@ -1,0 +1,70 @@
+syntax = "proto3";
+option go_package = "github.com/pocket5s/dedb";
+import "google/rpc/status.proto";
+import "google/protobuf/any.proto";
+package dedb;
+
+service DeDB {
+  rpc Save(SaveRequest) returns (SaveResponse);
+  rpc GetDomain(GetDomainRequest) returns (GetResponse);
+  rpc GetDomainIds(GetDomainIdsRequest) returns (GetDomainIdsResponse);
+  rpc Subscribe( stream SubscribeRequest ) returns (stream SubscribeResponse);
+}
+
+message SaveRequest {
+  repeated Event events = 1;
+}
+
+message SaveResponse {}
+
+message GetDomainRequest {
+  string domain    = 1; // Customer, Transaction, etc.
+  string domain_id = 2;
+  int64  offset    = 3;
+  int64  limit     = 4;
+}
+
+message GetResponse {
+  repeated dedb.Event events = 1;
+}
+
+message GetDomainIdsRequest {
+  string domain = 1; // The domain to get all the IDs for
+  int64  offset = 2;
+  int64  limit  = 3;
+}
+
+message GetDomainIdsResponse {
+  repeated string domain_ids = 1;
+}
+
+message SubscribeRequest {
+  string consumer_group       = 1; // The consumer/service connecting
+  enum RequestType {
+    ACK        = 0; // Default, acking a message was received
+    CONNECT    = 1; // Tells the service this is an initial connection
+    DISCONNECT = 2; // Gracefully tells the service this client is disconnecting
+  }
+  RequestType request_type    = 2;
+  string domain               = 3; // Required if ACK
+  int64 timestamp             = 4; // Required if ACK
+  repeated string event_names = 5; // List of events this client is interested in. Required if CONNECT
+}
+
+message SubscribeResponse {
+  oneof message {
+    google.rpc.Status error = 1; // If the service connected to is _not_ the leader, a status code of FAILED_PRECONDITION with the message being the leader's IP
+    Event event             = 2; // An event the client is subscribed to
+  }
+}
+
+message Event {
+  string id                    = 1;
+  string name                  = 2;
+  int64  timestamp             = 3;
+  string trace_id              = 4;
+  string domain                = 5;
+  string domain_id             = 6;
+  map<string, string> metadata = 7;
+  google.protobuf.Any data     = 8;
+}
