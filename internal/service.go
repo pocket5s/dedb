@@ -42,7 +42,7 @@ func (s *Service) GetDomainIds(ctx context.Context, request *api.GetDomainIdsReq
 	return &api.GetDomainIdsResponse{DomainIds: ids}, nil
 }
 
-func (s *Service) Subscribe(src api.DeDB_SubscribeClient) error {
+func (s *Service) Subscribe(src api.DeDB_SubscribeServer) error {
 	/*
 		for {
 			if s.shutdown {
