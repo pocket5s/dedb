@@ -10,6 +10,9 @@ import (
 	api "dedb"
 )
 
+/*
+ Base API level gRPC service
+*/
 type Service struct {
 	repo repository
 	pub  publisher
