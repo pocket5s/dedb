@@ -15,6 +15,7 @@ type redisPublisher struct {
 	client *redis.Client
 }
 
+// NewRedisPublisher function    
 func NewRedisPublisher(config Config) (*redisPublisher, error) {
 	pub := &redisPublisher{
 		log:    log.With().Str("logger", "redisPublisher").Logger(),
