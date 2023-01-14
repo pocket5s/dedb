@@ -48,17 +48,19 @@ func main() {
 			log.Error().Err(err).Msg("failed to process config")
 		}
 
-		//conns := util.Connect(config, log)
-
 		log.Info().Msg("registering services with GRPC server")
 		api.RegisterDeDBServer(grpcServer, service)
 
 		log.Info().Msgf("starting service")
-		//service.Start(ctx, g, conns, &config)
+        err = service.Start(config)
+        if err != nil {
+            log.Error().Err(err).Msg("could not start service")
+            return err
+        }
 
 		lis, err := net.Listen("tcp", config.ServiceGrpcPort)
 		if err != nil {
-			log.Fatal().Msg(fmt.Sprintf("failed to listen: %v", err))
+			log.Error().Err(err).Msg(fmt.Sprintf("failed to listen: %v", err))
 			return err
 		}
 
