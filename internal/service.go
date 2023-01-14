@@ -76,7 +76,9 @@ func (s *Service) Subscribe(src api.DeDB_SubscribeServer) error {
 }
 
 func (s *Service) Shutdown() {
-	s.repo.shutdown()
+    if s.repo != nil {
+	    s.repo.shutdown()
+    }
 }
 
 func (s *Service) Start(config Config) error {
