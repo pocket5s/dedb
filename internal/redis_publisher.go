@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"dedb"
+	"encoding/json"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/rs/zerolog"
@@ -15,7 +16,7 @@ type redisPublisher struct {
 	client *redis.Client
 }
 
-// NewRedisPublisher function    
+// NewRedisPublisher function  
 func NewRedisPublisher(config Config) (*redisPublisher, error) {
 	pub := &redisPublisher{
 		log:    log.With().Str("logger", "redisPublisher").Logger(),
@@ -37,13 +38,20 @@ func (p *redisPublisher) publish(ctx context.Context, events []*dedb.Event) {
 		if err != nil {
 			p.log.Error().Err(err).Msgf("could not encode event id %s", event.Id)
 		} else {
+			md := ""
+			if event.Metadata != nil {
+				jsonStr, err := json.Marshal(event.Metadata)
+				if err == nil {
+					md = string(jsonStr)
+				}
+			}
 			args := redis.XAddArgs{
 				Stream: "dedb:stream:" + event.Domain,
 				Values: map[string]interface{}{
 					"id":        event.Id,
 					"name":      event.Name,
 					"timestamp": event.Timestamp,
-					"metadata":  event.Metadata,
+					"metadata":  md,
 					"data":      encoded,
 				},
 			}

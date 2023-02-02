@@ -16,7 +16,8 @@ func TestRepoSave(t *testing.T) {
 	ctx := context.Background()
 	config := Config{
 		RedisDbConfig: RedisDbConfig{
-			Server: "redis:6379",
+			DbAddress: "redis:6379",
+			DbIndex:   0,
 		},
 	}
 	repo, err := NewRedisRepo(config)
@@ -105,7 +106,8 @@ func TestRepoGetDomain(t *testing.T) {
 	ctx := context.Background()
 	config := Config{
 		RedisDbConfig: RedisDbConfig{
-			Server: "redis:6379",
+			DbAddress: "redis:6379",
+			DbIndex:   0,
 		},
 	}
 	repo, err := NewRedisRepo(config)
@@ -204,7 +206,8 @@ func TestGetDomainIds(t *testing.T) {
 	ctx := context.Background()
 	config := Config{
 		RedisDbConfig: RedisDbConfig{
-			Server: "redis:6379",
+			DbAddress: "redis:6379",
+			DbIndex:   0,
 		},
 	}
 	repo, err := NewRedisRepo(config)

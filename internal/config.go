@@ -1,7 +1,7 @@
 package internal
 
 type RedisDbConfig struct {
-	Server        string `envconfig:"REDIS_DB"`
+	DbAddress     string `envconfig:"REDIS_DB_ADDRESS"`
 	Password      string `envconfig:"REDIS_DB_PASSWORD"`
 	RedisCa       string `envconfig:"REDIS_DB_CA"`
 	RedisUserCert string `envconfig:"REDIS_DB_USER_CERT"`
@@ -10,10 +10,11 @@ type RedisDbConfig struct {
 	MinIdle       int    `envconfig:"REDIS_DB_MINIDLE"`
 	MaxActive     int    `envconfig:"REDIS_DB_MAXACTIVE"`
 	IdleTimeout   int64  `envconfig:"REDIS_DB_IDLE_TIMEOUT"`
+	DbIndex       int    `envconfig:"REDIS_DB_INDEX"`
 }
 
 type RedisSearchConfig struct {
-	Server        string `envconfig:"REDIS_SEARCH"`
+	DbAddress     string `envconfig:"REDIS_SEARCH_ADDRESS"`
 	Password      string `envconfig:"REDIS_SEARCH_PASSWORD"`
 	RedisCa       string `envconfig:"REDIS_SEARCH_CA"`
 	RedisUserCert string `envconfig:"REDIS_SEARCH_USER_CERT"`
@@ -22,6 +23,7 @@ type RedisSearchConfig struct {
 	MinIdle       int    `envconfig:"REDIS_SEARCH_MINIDLE"`
 	MaxActive     int    `envconfig:"REDIS_SEARCH_MAXACTIVE"`
 	IdleTimeout   int64  `envconfig:"REDIS_SEARCH_IDLE_TIMEOUT"`
+	DbIndex       int    `envconfig:"REDIS_SEARCH_DB_INDEX"`
 }
 
 type Config struct {

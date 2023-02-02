@@ -31,7 +31,7 @@ func Decode(entity proto.Message, data string) error {
 
 func newPool(useSearch bool, baseConfig Config, log *zerolog.Logger) (*redis.Client, error) {
 	type commonConfig struct {
-		Server        string
+		DbAddress     string
 		Password      string
 		RedisCa       string
 		RedisUserCert string
@@ -40,6 +40,7 @@ func newPool(useSearch bool, baseConfig Config, log *zerolog.Logger) (*redis.Cli
 		MinIdle       int
 		MaxActive     int
 		IdleTimeout   int64
+		DbIndex       int
 	}
 
 	config := commonConfig(baseConfig.RedisDbConfig)
@@ -98,10 +99,11 @@ func newPool(useSearch bool, baseConfig Config, log *zerolog.Logger) (*redis.Cli
 	} else {
 		log.Info().Msgf("setting pool for non TLS enabled Redis server: %s, min idle: %d, max active: %d, idle timeout: %d", config.Server, config.MinIdle, config.MaxActive, config.IdleTimeout)
 		return redis.NewClient(&redis.Options{
-			Addr:         config.Server,
+			Addr:         config.DbAddress,
 			Password:     config.Password,
 			MinIdleConns: config.MinIdle,
 			PoolSize:     config.MaxActive,
+			DB:           config.DbIndex,
 			IdleTimeout:  time.Duration(config.IdleTimeout) * time.Second,
 		}), nil
 	}
