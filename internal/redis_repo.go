@@ -18,15 +18,18 @@ const (
 )
 
 /*
-	data structure is as follows:
-	each domain type has a sorted set of domain ids, sorted by microsecond it was added
-		dedb:domain_types:<domain> => SortedSet
+data structure is as follows:
+each domain type has a sorted set of domain ids, sorted by microsecond it was added
 
-	each domain instance has a list of events that make up that domain instance
-		dedb:domain_events:<domain_id> => List
+	dedb:domain_types:<domain> => SortedSet
 
-	each domain id has a sorted set reverse index of the timestamp:event_id
-		dedb:domain_events_timestamp_idx:0:<domain_id> => SortedSet
+each domain instance has a list of events that make up that domain instance
+
+	dedb:domain_events:<domain_id> => List
+
+each domain id has a sorted set reverse index of the timestamp:event_id
+
+	dedb:domain_events_timestamp_idx:0:<domain_id> => SortedSet
 */
 type redisRepo struct {
 	log    zerolog.Logger
@@ -65,7 +68,7 @@ func NewRedisRepo(config Config) (*redisRepo, error) {
 }
 
 func validateRedisDbConfig(config RedisDbConfig) error {
-	if config.Server == "" {
+	if config.DbAddress == "" {
 		return fmt.Errorf("REDIS_DB config entry required")
 	}
 	if config.RedisCa != "" {

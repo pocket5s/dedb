@@ -14,8 +14,11 @@ services:
     depends_on:
       - redis
     environment:
-      - REDIS=redis
-      - REDIS_PASSWORD=
+      - REPO_IMPL=redis
+      - REDIS_DB_ADDRESS=redis
+      - REDIS_DB_PASSWORD=
+      - BROKER_IMPL=redis
+      - SERVICE_PORT=:50000
     volumes:
       - ../:/go/src/github.com/pocket5s/dedb
       - ~/.ssh/:/root/.ssh/

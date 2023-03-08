@@ -97,7 +97,7 @@ func newPool(useSearch bool, baseConfig Config, log *zerolog.Logger) (*redis.Cli
 			}, nil
 		*/
 	} else {
-		log.Info().Msgf("setting pool for non TLS enabled Redis server: %s, min idle: %d, max active: %d, idle timeout: %d", config.Server, config.MinIdle, config.MaxActive, config.IdleTimeout)
+		log.Info().Msgf("setting pool for non TLS enabled Redis server: %s, min idle: %d, max active: %d, idle timeout: %d", config.DbAddress, config.MinIdle, config.MaxActive, config.IdleTimeout)
 		return redis.NewClient(&redis.Options{
 			Addr:         config.DbAddress,
 			Password:     config.Password,

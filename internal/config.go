@@ -31,7 +31,6 @@ type Config struct {
 	RedisSearchConfig RedisSearchConfig
 	RepoImpl          string `envconfig:"REPO_IMPL" required:"true"`
 	BrokerImpl        string `envconfig:"BROKER_IMPL" required:"true"`
-	GrpcHost          string `envconfig:"GRPC_HOST" required:"true"`
 	UseRedisSearch    string `envconfig:"USE_REDIS_SEARCH"`
 	ServiceGrpcPort   string `envconfig:"SERVICE_PORT" required:"true"`
 }
