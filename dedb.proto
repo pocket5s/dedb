@@ -66,5 +66,5 @@ message Event {
   string domain                = 5;
   string domain_id             = 6;
   map<string, string> metadata = 7;
-  google.protobuf.Any data     = 8;
+  bytes data                   = 8;
 }

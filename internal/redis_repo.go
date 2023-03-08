@@ -124,6 +124,7 @@ func (r *redisRepo) save(ctx context.Context, events []*dedb.Event) error {
 
 			encoded, err := Encode(e)
 			if err != nil {
+				log.Error().Err(err).Msgf("could not encode event")
 				return err
 			}
 

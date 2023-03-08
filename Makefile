@@ -29,6 +29,8 @@ genproto:
 	mv github.com/pocket5s/dedb/* .
 	rm -fr github.com
 
+run:
+	go run cmd/main.go
 
 build:
 	@-$(MAKE) -s clean

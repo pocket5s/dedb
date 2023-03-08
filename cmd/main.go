@@ -51,12 +51,12 @@ func main() {
 		log.Info().Msg("registering services with GRPC server")
 		api.RegisterDeDBServer(grpcServer, service)
 
-		log.Info().Msgf("starting service")
-        err = service.Start(config)
-        if err != nil {
-            log.Error().Err(err).Msg("could not start service")
-            return err
-        }
+		log.Info().Msgf("starting service at: %s", config.ServiceGrpcPort)
+		err = service.Start(config)
+		if err != nil {
+			log.Error().Err(err).Msg("could not start service")
+			return err
+		}
 
 		lis, err := net.Listen("tcp", config.ServiceGrpcPort)
 		if err != nil {
