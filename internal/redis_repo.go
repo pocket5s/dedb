@@ -124,7 +124,7 @@ func (r *redisRepo) save(ctx context.Context, events []*dedb.Event) error {
 			}
 
 			sEnc := b64.StdEncoding.EncodeToString([]byte(e.Data))
-			e.Data = sEnc
+			e.Data = []byte(sEnc)
 			encoded, err := Encode(e)
 			if err != nil {
 				log.Error().Err(err).Msgf("could not encode event")
