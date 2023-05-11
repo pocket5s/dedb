@@ -3,7 +3,6 @@ package internal
 import (
 	"context"
 	"dedb"
-	b64 "encoding/base64"
 	"fmt"
 	"strconv"
 	"time"
@@ -123,8 +122,8 @@ func (r *redisRepo) save(ctx context.Context, events []*dedb.Event) error {
 				key:    e.DomainId,
 			}
 
-			sEnc := b64.StdEncoding.EncodeToString([]byte(e.Data))
-			e.Data = []byte(sEnc)
+			//sEnc := b64.StdEncoding.EncodeToString([]byte(e.Data))
+			//e.Data = []byte(sEnc)
 			encoded, err := Encode(e)
 			if err != nil {
 				log.Error().Err(err).Msgf("could not encode event")
