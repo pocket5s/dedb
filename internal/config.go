@@ -3,6 +3,7 @@ package internal
 type RedisDbConfig struct {
 	DbAddress     string `envconfig:"REDIS_DB_ADDRESS"`
 	Password      string `envconfig:"REDIS_DB_PASSWORD"`
+	Username      string `envconfig:"REDIS_DB_USER"`
 	RedisCa       string `envconfig:"REDIS_DB_CA"`
 	RedisUserCert string `envconfig:"REDIS_DB_USER_CERT"`
 	RedisUserKey  string `envconfig:"REDIS_DB_USER_KEY"`
@@ -16,6 +17,7 @@ type RedisDbConfig struct {
 type RedisSearchConfig struct {
 	DbAddress     string `envconfig:"REDIS_SEARCH_ADDRESS"`
 	Password      string `envconfig:"REDIS_SEARCH_PASSWORD"`
+	Username      string `envconfig:"REDIS_DB_USER"`
 	RedisCa       string `envconfig:"REDIS_SEARCH_CA"`
 	RedisUserCert string `envconfig:"REDIS_SEARCH_USER_CERT"`
 	RedisUserKey  string `envconfig:"REDIS_SEARCH_USER_KEY"`

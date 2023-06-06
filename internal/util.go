@@ -33,6 +33,7 @@ func newPool(useSearch bool, baseConfig Config, log *zerolog.Logger) (*redis.Cli
 	type commonConfig struct {
 		DbAddress     string
 		Password      string
+		Username      string
 		RedisCa       string
 		RedisUserCert string
 		RedisUserKey  string
