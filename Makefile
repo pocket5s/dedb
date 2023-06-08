@@ -34,6 +34,6 @@ run:
 
 build:
 	@-$(MAKE) -s clean
-	#@-$(MAKE) -s genproto
-	go build -o app cmd/main.go
+	@-$(MAKE) -s genproto
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o app cmd/main.go
 	chmod +x app
