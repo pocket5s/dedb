@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"strings"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -99,14 +100,24 @@ func newPool(useSearch bool, baseConfig Config, log *zerolog.Logger) (*redis.Cli
 		*/
 	} else {
 		log.Info().Msgf("setting pool for non TLS enabled Redis server: %s, min idle: %d, max active: %d, idle timeout: %d", config.DbAddress, config.MinIdle, config.MaxActive, config.IdleTimeout)
-		return redis.NewClient(&redis.Options{
-			Addr:         config.DbAddress,
-			Password:     config.Password,
-			MinIdleConns: config.MinIdle,
-			PoolSize:     config.MaxActive,
-			DB:           config.DbIndex,
-			IdleTimeout:  time.Duration(config.IdleTimeout) * time.Second,
-		}), nil
+		if strings.Contains(config.DbAddress, "redis://") {
+			log.Info().Msgf("CONNECTING VIA redis:// URL")
+			opt, err := redis.ParseURL(config.DbAddress)
+			if err != nil {
+				log.Error().Err(err).Msgf("could not connect to %s", config.DbAddress)
+				return nil, err
+			}
+			return redis.NewClient(opt), nil
+		} else {
+			return redis.NewClient(&redis.Options{
+				Addr:         config.DbAddress,
+				Password:     config.Password,
+				MinIdleConns: config.MinIdle,
+				PoolSize:     config.MaxActive,
+				DB:           config.DbIndex,
+				IdleTimeout:  time.Duration(config.IdleTimeout) * time.Second,
+			}), nil
+		}
 	}
 	return nil, nil
 }

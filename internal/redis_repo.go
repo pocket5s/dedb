@@ -2,7 +2,6 @@ package internal
 
 import (
 	"context"
-	"dedb"
 	"fmt"
 	"strconv"
 	"time"
@@ -10,6 +9,8 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+
+	"dedb"
 )
 
 const (
@@ -60,8 +61,11 @@ func NewRedisRepo(config Config) (*redisRepo, error) {
 
 	pool, err := newPool(false, repo.config, &repo.log)
 	if err != nil {
+		_log := log.With().Str("logger", "redisRepo").Logger()
+		_log.Error().Err(err).Msgf("could not connect to redis")
 		return nil, err
 	}
+	log.Info().Msgf("connected to redis")
 	repo.pool = pool
 
 	return repo, nil
@@ -122,8 +126,8 @@ func (r *redisRepo) save(ctx context.Context, events []*dedb.Event) error {
 				key:    e.DomainId,
 			}
 
-			//sEnc := b64.StdEncoding.EncodeToString([]byte(e.Data))
-			//e.Data = []byte(sEnc)
+			// sEnc := b64.StdEncoding.EncodeToString([]byte(e.Data))
+			// e.Data = []byte(sEnc)
 			encoded, err := Encode(e)
 			if err != nil {
 				log.Error().Err(err).Msgf("could not encode event")
