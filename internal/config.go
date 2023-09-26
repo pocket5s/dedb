@@ -30,9 +30,14 @@ type RedisSearchConfig struct {
 
 type Config struct {
 	RedisDbConfig     RedisDbConfig
+	SqliteDbConfig    SqliteDbConfig
 	RedisSearchConfig RedisSearchConfig
 	RepoImpl          string `envconfig:"REPO_IMPL" required:"true"`
 	BrokerImpl        string `envconfig:"BROKER_IMPL" required:"true"`
 	UseRedisSearch    string `envconfig:"USE_REDIS_SEARCH"`
 	ServiceGrpcPort   string `envconfig:"SERVICE_PORT" required:"true"`
+}
+
+type SqliteDbConfig struct {
+	DbUrl string `envconfig:"SQLITE_DB_URL"`
 }
