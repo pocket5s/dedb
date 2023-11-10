@@ -22,6 +22,7 @@ require (
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/jmoiron/sqlx v1.3.5 // indirect
+	github.com/libsql/go-libsql v0.0.0-20231101083310-de118db91aed // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/onsi/gomega v1.19.0 // indirect
