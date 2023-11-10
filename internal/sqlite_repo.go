@@ -30,7 +30,7 @@ func (s *sqliteRepo) save(ctx context.Context, events []*dedb.Event) error {
 func (s *sqliteRepo) getDomain(ctx context.Context, domain string, domainId string, offset int64, limit int64) ([]*dedb.Event, error) {
 	log := s.log.With().Str("op", "getDomain").Logger()
 	log.Debug().Msgf("getting domain %s, id %s, offset %d, limit %d", domain, domainId, offset, limit)
-	sql := "SELECT id, domain, domain_id, data FROM domain_events WHERE domain_id = ? ORDER BY timestamp ASC LIMIT ?, ?"
+	sql := "SELECT id, domain, domain_id, name, timestamp, trace_id, data FROM domain_events WHERE domain_id = ? ORDER BY timestamp ASC LIMIT ?, ?"
 	events := []*dedb.Event{}
     err := s.db.Select(&events, sql, domainId, limit, offset)
     if err != nil {
