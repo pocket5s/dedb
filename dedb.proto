@@ -67,4 +67,5 @@ message Event {
   string domain_id             = 6;
   map<string, string> metadata = 7;
   bytes data                   = 8;
+  string stream_id             = 9;
 }
