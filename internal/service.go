@@ -11,7 +11,7 @@ import (
 )
 
 /*
- Base API level gRPC service
+Base API level gRPC service
 */
 type Service struct {
 	repo repository
@@ -76,9 +76,9 @@ func (s *Service) Subscribe(src api.DeDB_SubscribeServer) error {
 }
 
 func (s *Service) Shutdown() {
-    if s.repo != nil {
-	    s.repo.shutdown()
-    }
+	if s.repo != nil {
+		s.repo.shutdown()
+	}
 }
 
 func (s *Service) Start(config Config) error {
@@ -89,6 +89,14 @@ func (s *Service) Start(config Config) error {
 		r, err := NewRedisRepo(config)
 		if err != nil {
 			s.log.Error().Err(err).Msg("could not configure redis repo")
+			return err
+		} else {
+			s.repo = r
+		}
+	} else if config.RepoImpl == "sqlite" {
+		r, err := NewSqliteRepo(config)
+		if err != nil {
+			s.log.Error().Err(err).Msg("could not configure sqlite repo")
 			return err
 		} else {
 			s.repo = r
