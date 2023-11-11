@@ -25,6 +25,22 @@ func (s *sqliteRepo) save(ctx context.Context, events []*dedb.Event) error {
 	}
 	log.Info().Msgf("saving %d events", len(events))
 	// timestamp := time.Now().UnixMicro()
+	sql := `
+    INSERT INTO domain_events (id, domain, domain_id, name, timestamp, trace_id, data)
+    VALUES(?, ?, ?, ?, ?, ?, ?);
+    `
+	for _, event := range events {
+		_, err := s.db.Exec(sql, event.Id, event.Domain, event.DomainId, event.Name, event.Timestamp, string(event.Data))
+		if err != nil {
+			s.log.Error().Err(err).Msgf("could not save event %s", event.Id)
+			return fmt.Errorf("Could not save event in dedb")
+		}
+		_, err = s.db.Exec("INSERT INTO domains (id, domain) VALUES (?,?)", event.DomainId, event.Domain)
+		if err != nil {
+			s.log.Error().Err(err).Msgf("could not save event %s", event.Id)
+			return fmt.Errorf("Could not save event in dedb")
+		}
+	}
 	return nil
 }
 
@@ -73,5 +89,30 @@ func NewSqliteRepo(config Config) (*sqliteRepo, error) {
 	r.db = db
 
 	r.log.Info().Msgf("connected to sqlite")
+	sql := `
+    CREATE TABLE IF NOT EXISTS domain_events  (
+        id TEXT,
+        name TEXT,
+        domain TEXT,
+        domain_id TEXT,
+        trace_id TEXT,
+        timestamp NUMBER,
+        data TEXT
+    );
+    `
+	_, err = r.db.Exec(sql)
+	if err != nil {
+		r.log.Error().Err(err).Msgf("could not create domain_events table")
+	}
+	sql = `
+    CREATE TABLE IF NOT EXISTS domains (
+        id TEXT,
+        domain TEXT
+    );
+    `
+	r.db.Exec(sql)
+	if err != nil {
+		r.log.Error().Err(err).Msgf("could not create domains table")
+	}
 	return r, nil
 }
